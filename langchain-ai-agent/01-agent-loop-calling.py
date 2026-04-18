@@ -7,7 +7,7 @@ from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 load_dotenv()
 
 MAX_ITERATIONS = 10
-MODEL = "qwen3:1.7b"
+MODEL = "openai:gpt-5"
 
 
 # =========================
@@ -48,7 +48,7 @@ def run_agent(question: str):
     tools = [get_product_price, apply_discount]
     tools_dict = {t.name: t for t in tools}
 
-    llm = init_chat_model(f"ollama:{MODEL}", temperature=0)
+    llm = init_chat_model(f"{MODEL}", temperature=0)  # For Ollama: use ollama:{MODEL} and above chnage the MODEL
     llm_with_tools = llm.bind_tools(tools)
 
     print(f"Query: {question}")
