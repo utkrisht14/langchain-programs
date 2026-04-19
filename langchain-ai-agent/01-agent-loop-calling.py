@@ -46,9 +46,9 @@ def apply_discount(price: float, discount_tier: str) -> float:
 @traceable(name="LangChain Agent Loop")
 def run_agent(question: str):
     tools = [get_product_price, apply_discount]
-    tools_dict = {t.name: t for t in tools}
+    tools_dict = {t.name: t for t in tools}  # "name" in t.name comes from the function name by default
 
-    llm = init_chat_model(f"{MODEL}", temperature=0)  # For Ollama: use ollama:{MODEL} and above chnage the MODEL
+    llm = init_chat_model(f"{MODEL}", temperature=0)  # For Ollama: use ollama:{MODEL} and above change the MODEL
     llm_with_tools = llm.bind_tools(tools)
 
     print(f"Query: {question}")
