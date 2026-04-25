@@ -7,16 +7,21 @@ from langchain_pinecone import PineconeVectorStore
 
 load_dotenv()
 
-
-
+print(os.getcwd())
 
 if __name__ == "__main__":
     print("Ingesting....")
-    loader = TextLoader("rag-programs/mediumblog1.txt")
-    document = loader.load()
+
+    loader = TextLoader(
+        r"C:\Users\utkri\PycharmProjects\LangChainCourse\rag-programs\mediumblog1.txt",
+        encoding="utf-8",
+        autodetect_encoding=True
+    )
+
+    documents = loader.load()
 
     print("Splitting....")
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-    texts = text_splitter.split_couments(document)
-    print(f"created {len(texts)} chunks.")
+    texts = text_splitter.split_documents(documents)
 
+    print(f"created {len(texts)} chunks.")
