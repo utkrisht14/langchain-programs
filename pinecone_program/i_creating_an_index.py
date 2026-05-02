@@ -216,9 +216,42 @@ if chunk_ids:
         # Process the vector values and metadata as needed
 
 
+# --------------------------------------------
+# Update chunks
+# --------------------------------------------
 
+from pinecone.grpc import PineconeGRPC as Pinecone
 
+pc = Pinecone(os.getenv("PINECONE_API_KEY"))
 
+INDEX_HOST = os.getenv("INDEX_HOST")
+
+index = pc.Index(INDEX_HOST)
+
+# List all chunks for document1
+chunk_ids = []
+for record_id in index.list(prefix="document1", namespace="example-namespace"):
+    chunk_ids.append(record_id)
+
+# Update specific chunks (e.g. update chunk2)
+if "document1#chunk2" in chunk_ids:
+    new_vector = ...  # from our embedding model
+    index.update(
+        id='document1#chunk2',
+        values=new_vector,
+        set_metadata={
+            "document_id": "document1",
+            "document_title": "Introduction to Vector Databases - Revised",
+            "chunk_number": 2,
+            "chunk_text": "Updated second chunk content...",
+            "document_url": "https://example.com/docs/document1",
+            "created_at": "2024-01-15",
+            "updated_at": "2024-02-15",
+            "document_type": "tutorial"
+        },
+        namespace='example-namespace'
+    )
+    print("Updated chunk 2 successfully")
 
 
 
