@@ -157,9 +157,63 @@ index.upsert_records(
 )
 
 
+# --------------------------------------------
+# Search chunks
+# --------------------------------------------
+
+from pinecone import Pinecone
+
+pc = Pinecone(os.getenv("PINECONE_API_KEY"))
+
+index = pc.Index(host=INDEX_HOST)
+
+filtered_result = index.search(
+    namespace = "example-namespace",
+    query = {
+        "inputs": {"text": "What is vector database?"},
+        "top_k": 3,
+        "filter": {"document_id": "document_1"}
+    },
+    fields = ["chunk_text"]
+)
+
+print(filtered_result)
 
 
 
+# --------------------------------------------
+# Fetch chunks
+# --------------------------------------------
+
+# Here we try to fecth the chunk using chunk_id
+
+# To retrieve all chunks for a specific document, first list the record IDs using the document prefix,
+# and then fetch the complete records:
+
+from pinecone.grpc import PineconeGRPC as Pinecone
+
+pc = Pinecone(api_key=os.environ['PINECONE_API_KEY'])
+INDEX_HOST = os.getenv("INDEX_HOST")
+
+index = pc.Index(host=INDEX_HOST)
+
+# List all chunks for dicument1 using ID prefix
+chunk_ids = []
+
+for record_id in index.list_records(namespace="example-namespace", prefix="document1#"):
+    chunk_ids.append(record_id)
+
+print(f"Found {len(chunk_ids)} chunks for document1:")
+
+
+# Fetch the complete records
+if chunk_ids:
+    records = index.fetch(id=chunk_ids, namespace="example-namespace")
+
+    for record_id, record_data in records['vectors'].items():
+        print(f"Chunk ID: {record_id}")
+        print(f"Chunk text: {record_data['metadata']['chunk_text']}")
+        # Process the vector values and metadata as needed
 
 
 
