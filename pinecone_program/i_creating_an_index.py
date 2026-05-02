@@ -106,6 +106,68 @@ if not pc.has_index(index_name):
     )
 
 
+# --------------------------------------------
+# Upsert chunks
+# --------------------------------------------
+
+from pinecone.grpc import PineconeGRPC as Pinecone
+from dotenv import load_dotenv
+
+INDEX_HOST = os.getenv("INDEX_HOST")
+
+pc = Pinecone(api_key=os.environ['PINECONE_API_KEY'])
+
+index = pc.Index(host=INDEX_HOST)
+
+index.upsert_records(
+    "example-namespace",
+    [
+        {
+            "_id" : "document1#chunk1",
+            "chunk_text": "First chunk of the document content...",
+            "document_id": "document1",
+            "document_title": "Introduction to Vector Databases",
+            "chunk_number": 1,
+            "document_url": "https://www.datacamp.com/community/tutorials/introduction-vector-databases",
+            "created_at": "2024-03-05",
+            "document_type": "tutorial",
+
+        },
+{
+      "_id": "document1#chunk2",
+      "chunk_text": "Second chunk of the document content...",
+      "document_id": "document1",
+      "document_title": "Introduction to Vector Databases",
+      "chunk_number": 2,
+      "document_url": "https://example.com/docs/document1",
+      "created_at": "2024-01-15",
+      "document_type": "tutorial"
+    },
+    {
+      "_id": "document1#chunk3",
+      "chunk_text": "Third chunk of the document content...",
+      "document_id": "document1",
+      "document_title": "Introduction to Vector Databases",
+      "chunk_number": 3,
+      "document_url": "https://example.com/docs/document1",
+      "created_at": "2024-01-15",
+      "document_type": "tutorial"
+    },
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
