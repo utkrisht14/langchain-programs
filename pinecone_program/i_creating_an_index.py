@@ -254,6 +254,35 @@ if "document1#chunk2" in chunk_ids:
     print("Updated chunk 2 successfully")
 
 
+# ------------------------------------------------
+# Delete chunks added
+# ------------------------------------------------
+
+from pinecone.grpc import PineconeGRPC as Pinecone
+
+pc = Pinecone(os.getenv("PINECONE_API_KEY"))
+
+INDEX_HOST = os.getenv("INDEX_HOST")
+
+# Delete chunks 1 and 3
+index.delete(
+    namespace = "example-namespace",
+    filter = {
+        "document_id" : {"$eq": "document1"},
+        "chunk_number": {"$in": [1, 3]}
+    }
+)
+
+# Delete all chunks for a document
+index.delete(
+    namspace= "example-namespace",
+    filter = {
+        "document_id": {"$eq": "document1"}
+    }
+)
+
+
+
 
 
 
